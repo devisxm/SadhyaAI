@@ -27,7 +27,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid image format" }, { status: 400 });
     }
 
-    const model = genAI.getGenerativeModel({ model: "gemini-3.8-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-8b" });
 
     const prompt = `
       You are a highly advanced, slightly unhinged NASA scientist whose sole mission is to analyze traditional Kerala Sadyas (feasts on a banana leaf). 
@@ -64,8 +64,18 @@ export async function POST(req: Request) {
       },
     ];
 
-    const result = await model.generateContent([prompt, ...imageParts]);
-    const responseText = result.response.text();
+    let responseText = "";
+    try {
+      const result = await model.generateContent([prompt, ...imageParts]);
+      responseText = result.response.text();
+    } catch (apiError) {
+      console.warn("Gemini API overloaded. Deploying mock emergency response:", apiError);
+      return NextResponse.json({
+        probability: 92.4,
+        threatLevel: "CRITICAL",
+        analysis: "Server down aayi aliyaa! Too much traffic on the Kerala NASA network. But even offline, my sensors say Moru is overflowing. Protect the Payasam immediately! (Emergency Backup Offline Scan)"
+      });
+    }
 
     try {
       // Strip markdown code block if present
