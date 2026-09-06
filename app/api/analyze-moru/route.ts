@@ -1,16 +1,12 @@
-import Groq from "groq-sdk";
 import { NextResponse } from "next/server";
-
-// Initialize Groq API
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY || "" });
 
 export const maxDuration = 30; // 30 seconds max duration
 
 export async function POST(req: Request) {
   try {
-    if (!process.env.GROQ_API_KEY || process.env.GROQ_API_KEY === "YOUR_GROQ_API_KEY_HERE") {
+    if (!process.env.AZURE_AI_ENDPOINT || !process.env.AZURE_AI_API_KEY) {
       return NextResponse.json(
-        { error: "GROQ_API_KEY is not configured in the environment variables. Please add it to .env.local" },
+        { error: "Azure AI credentials are not configured in the environment variables." },
         { status: 500 }
       );
     }
@@ -49,33 +45,78 @@ export async function POST(req: Request) {
 
     let responseText = "";
     try {
-      const chatCompletion = await groq.chat.completions.create({
-        messages: [
-          {
-            role: "user",
-            content: [
-              { type: "text", text: prompt },
-              {
-                type: "image_url",
-                image_url: {
-                  url: image,
+      const url = `${process.env.AZURE_AI_ENDPOINT}/chat/completions?api-version=2024-02-15-preview`;
+      
+      const response = await fetch(url, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "api-key": process.env.AZURE_AI_API_KEY,
+        },
+        body: JSON.stringify({
+          messages: [
+            {
+              role: "user",
+              content: [
+                { type: "text", text: prompt },
+                {
+                  type: "image_url",
+                  image_url: {
+                    url: image, // Image is passed in base64 data URI from the frontend
+                  },
                 },
-              },
-            ],
-          },
-        ],
-        model: "llama-3.2-90b-vision-preview",
-        temperature: 0.7,
-        response_format: { type: "json_object" },
+              ],
+            },
+          ]
+        }),
       });
 
-      responseText = chatCompletion.choices[0]?.message?.content || "";
+      if (!response.ok) {
+        const errorData = await response.text();
+        throw new Error(`Azure API Error: ${response.status} - ${errorData}`);
+      }
+
+      const data = await response.json();
+      console.log("AZURE FULL RESPONSE:", JSON.stringify(data, null, 2));
+      responseText = data.choices[0]?.message?.content || "";
+      
     } catch (apiError) {
-      console.warn("Groq API overloaded or invalid key. Deploying mock emergency response:", apiError);
+      console.warn("Azure AI API failed. Deploying mock emergency response:", apiError);
+      
+      const fallbacks = [
+        {
+          probability: 99.9,
+          threatLevel: "CRITICAL",
+          analysis: "Server off aayi mone! But offline sensors predict massive Moru breach. Payasam is in extreme danger. Evacuate the plantain leaf immediately! (Offline Scan)"
+        },
+        {
+          probability: 85.2,
+          threatLevel: "HIGH",
+          analysis: "API connection lost aliyaa. But visuals suggest Moru viscosity is dangerously thin. Sambar perimeter is compromised. Deploy the Pappadam shields! (Offline Scan)"
+        },
+        {
+          probability: 12.5,
+          threatLevel: "LOW",
+          analysis: "Network down! But my backup Kerala-NASA algorithms show the Moru is safely contained. You can breathe a sigh of relief, payasam safe aanu. (Offline Scan)"
+        },
+        {
+          probability: 67.8,
+          threatLevel: "ELEVATED",
+          analysis: "API error vannu bro! Fluid dynamics suggest a moderate flow towards the Avial sector. Keep an eye on that boundary. (Offline Scan)"
+        },
+        {
+          probability: 43.1,
+          threatLevel: "MODERATE",
+          analysis: "Connection cut aayi. But structural integrity of the rice wall seems okay for now. Moru levels are stable, pakshe kurachu pedikkanam. (Offline Scan)"
+        }
+      ];
+
+      const randomFallback = fallbacks[Math.floor(Math.random() * fallbacks.length)];
+      const randomizedProbability = (randomFallback.probability + (Math.random() * 2 - 1)).toFixed(1);
+
       return NextResponse.json({
-        probability: 92.4,
-        threatLevel: "CRITICAL",
-        analysis: "Server down aayi aliyaa! Too much traffic on the Kerala NASA network. But even offline, my sensors say Moru is overflowing. Protect the Payasam immediately! (Emergency Backup Offline Scan)"
+        ...randomFallback,
+        probability: parseFloat(randomizedProbability)
       });
     }
 
@@ -85,7 +126,7 @@ export async function POST(req: Request) {
       const parsed = JSON.parse(jsonString);
       return NextResponse.json(parsed);
     } catch (parseError) {
-      console.error("Failed to parse Groq response:", responseText);
+      console.error("Failed to parse AI response:", responseText);
       return NextResponse.json({ 
         probability: 99.9, 
         threatLevel: "UNKNOWN",
