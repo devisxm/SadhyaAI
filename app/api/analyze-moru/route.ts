@@ -27,7 +27,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid image format" }, { status: 400 });
     }
 
-    const model = genAI.getGenerativeModel({ model: "gemini-3.5-flash" });
+    const model = genAI.getGenerativeModel({ model: "gemini-3.8-flash" });
 
     const prompt = `
       You are a highly advanced, slightly unhinged NASA scientist whose sole mission is to analyze traditional Kerala Sadyas (feasts on a banana leaf). 
