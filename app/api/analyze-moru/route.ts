@@ -1,33 +1,25 @@
-import { GoogleGenerativeAI } from "@google/generative-ai";
+import Groq from "groq-sdk";
 import { NextResponse } from "next/server";
 
-// Initialize Gemini API
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY || "");
+// Initialize Groq API
+const groq = new Groq({ apiKey: process.env.GROQ_API_KEY || "" });
 
 export const maxDuration = 30; // 30 seconds max duration
 
 export async function POST(req: Request) {
   try {
-    if (!process.env.GEMINI_API_KEY) {
+    if (!process.env.GROQ_API_KEY || process.env.GROQ_API_KEY === "YOUR_GROQ_API_KEY_HERE") {
       return NextResponse.json(
-        { error: "GEMINI_API_KEY is not configured in the environment variables." },
+        { error: "GROQ_API_KEY is not configured in the environment variables. Please add it to .env.local" },
         { status: 500 }
       );
     }
 
-    const { image, mimeType } = await req.json();
+    const { image } = await req.json();
 
     if (!image) {
       return NextResponse.json({ error: "No image provided" }, { status: 400 });
     }
-
-    // Convert base64 to inline data format for Gemini
-    const base64Data = image.split(",")[1];
-    if (!base64Data) {
-      return NextResponse.json({ error: "Invalid image format" }, { status: 400 });
-    }
-
-    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-8b" });
 
     const prompt = `
       You are a highly advanced, slightly unhinged NASA scientist whose sole mission is to analyze traditional Kerala Sadyas (feasts on a banana leaf). 
@@ -55,21 +47,31 @@ export async function POST(req: Request) {
       }
     `;
 
-    const imageParts = [
-      {
-        inlineData: {
-          data: base64Data,
-          mimeType: mimeType || "image/jpeg",
-        },
-      },
-    ];
-
     let responseText = "";
     try {
-      const result = await model.generateContent([prompt, ...imageParts]);
-      responseText = result.response.text();
+      const chatCompletion = await groq.chat.completions.create({
+        messages: [
+          {
+            role: "user",
+            content: [
+              { type: "text", text: prompt },
+              {
+                type: "image_url",
+                image_url: {
+                  url: image,
+                },
+              },
+            ],
+          },
+        ],
+        model: "llama-3.2-90b-vision-preview",
+        temperature: 0.7,
+        response_format: { type: "json_object" },
+      });
+
+      responseText = chatCompletion.choices[0]?.message?.content || "";
     } catch (apiError) {
-      console.warn("Gemini API overloaded. Deploying mock emergency response:", apiError);
+      console.warn("Groq API overloaded or invalid key. Deploying mock emergency response:", apiError);
       return NextResponse.json({
         probability: 92.4,
         threatLevel: "CRITICAL",
@@ -83,7 +85,7 @@ export async function POST(req: Request) {
       const parsed = JSON.parse(jsonString);
       return NextResponse.json(parsed);
     } catch (parseError) {
-      console.error("Failed to parse Gemini response:", responseText);
+      console.error("Failed to parse Groq response:", responseText);
       return NextResponse.json({ 
         probability: 99.9, 
         threatLevel: "UNKNOWN",
