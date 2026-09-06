@@ -11,7 +11,7 @@ import {
 import { motion, AnimatePresence } from "framer-motion";
 
 // Apple-like ease curve
-const appleEase = [0.16, 1, 0.3, 1];
+const appleEase: [number, number, number, number] = [0.16, 1, 0.3, 1];
 
 const staggerContainer = {
   hidden: { opacity: 0 },
