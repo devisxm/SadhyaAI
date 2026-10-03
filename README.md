@@ -1,36 +1,35 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+<img width="1280" height="640" alt="git (1)" src="https://github.com/user-attachments/assets/8920b256-2ba8-4988-b824-5351134eb4bd" />
 
-## Getting Started
+# SadhyaAI 🎯
 
-First, run the development server:
+## Basic Details
+### Team Name: Pentagon
 
+### Team Members
+- Team Lead: Isam Ismail - Viswajyothi College of Engineering and Technology
+- Member 2: TF Zafna - Viswajyothi College of engineering and technology 
+
+### Project Description
+SadhyaAI is a high-stakes, computer vision-powered banana leaf analytics system. It monitors your Onam feast in real time to calculate the mathematical probability of tragic curry containment failure—specifically predicting if your *moru* will breach containment into your *payasam*.
+
+### The Problem (that doesn't exist)
+Banana leaves lack structural bulkheads. When you're mid-feast, a rogue wave of spiced, salty buttermilk (*moru*) can breach the rice barrier, creeping perilously close to your sweet, innocent semiya *payasam*. Humanity has suffered through accidental sweet-and-sour slurry for generations without any predictive algorithmic intervention.
+
+### The Solution (that nobody asked for)
+We deployed deep learning to the dining hall. SadhyaAI scans your banana leaf via overhead camera, identifies curry viscosities and rice embankment integrity, and runs fluid dynamics simulations to calculate real-time fluid breach probabilities. If moru-payasam cross-contamination exceeds 42%, the system sounds an alarm and tells you to build a rice dam immediately.
+
+## Technical Details
+### Technologies/Components Used
+For Software:
+- NEXTJS (Framework for the website)
+- Tailwind and ShadCN (Frontend Design and Components)
+- Azure Foundry (AI Agent)
+
+### Implementation
+For Software:
+# Installation
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/devisxm/SadhyaAI.git
+cd SadhyaAI
+pip install -r requirements.txt
 ```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
