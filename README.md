@@ -7,28 +7,26 @@
 
 ### Team Members
 - Team Lead: Isam Ismail - Viswajyothi College of Engineering and Technology
-- Member 2: TF Zafna - Viswajyothi College of engineering and technology 
+- Member 2: TF Zafna - Viswajyothi College of Engineering and Technology
 
 ### Project Description
-SadhyaAI is a high-stakes, computer vision-powered banana leaf analytics system. It monitors your Onam feast in real time to calculate the mathematical probability of tragic curry containment failure—specifically predicting if your *moru* will breach containment into your *payasam*.
+SadhyaAI is a simple, quirky AI tool that scans an uploaded photo of your Sadhya banana leaf and calculates the exact probability of your *moru* (spiced buttermilk) accidentally mixing into the other curries.
 
 ### The Problem (that doesn't exist)
-Banana leaves lack structural bulkheads. When you're mid-feast, a rogue wave of spiced, salty buttermilk (*moru*) can breach the rice barrier, creeping perilously close to your sweet, innocent semiya *payasam*. Humanity has suffered through accidental sweet-and-sour slurry for generations without any predictive algorithmic intervention.
+During an Onam feast, poured *moru* behaves unpredictably on a sloped banana leaf. People live in constant, unnecessary suspense wondering whether their moru will stay contained or spread across the leaf to collide with payasam, sambar, or avial.
 
 ### The Solution (that nobody asked for)
-We deployed deep learning to the dining hall. SadhyaAI scans your banana leaf via overhead camera, identifies curry viscosities and rice embankment integrity, and runs fluid dynamics simulations to calculate real-time fluid breach probabilities. If moru-payasam cross-contamination exceeds 42%, the system sounds an alarm and tells you to build a rice dam immediately.
+Just take a photo of your leaf and upload it. SadhyaAI passes the image to an AI agent hosted on Azure AI Foundry to evaluate the layout and return the precise percentage chance that your moru will mix with your other dishes.
 
 ## Technical Details
 ### Technologies/Components Used
 For Software:
-- NEXTJS (Framework for the website)
-- Tailwind and ShadCN (Frontend Design and Components)
-- Azure Foundry (AI Agent)
+- Next.js (Web Application Framework)
+- Tailwind CSS & shadcn/ui (Frontend Styling & UI Components)
+- Azure AI Foundry (Vision / AI Agent Model)
 
 # Installation
 ```bash
-git clone https://github.com/devisxm/SadhyaAI.git
+git clone [https://github.com/devisxm/SadhyaAI.git](https://github.com/devisxm/SadhyaAI.git)
 cd SadhyaAI
 npm i
-npm run dev
-```
