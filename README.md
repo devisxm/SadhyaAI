@@ -25,11 +25,10 @@ For Software:
 - Tailwind and ShadCN (Frontend Design and Components)
 - Azure Foundry (AI Agent)
 
-### Implementation
-For Software:
 # Installation
 ```bash
 git clone https://github.com/devisxm/SadhyaAI.git
 cd SadhyaAI
-pip install -r requirements.txt
+npm i
+npm run dev
 ```
